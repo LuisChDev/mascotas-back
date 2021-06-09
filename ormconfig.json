@@ -1,0 +1,13 @@
+{
+  "type": "mongodb",
+  "host": "localhost",
+  "port": 27017,
+  "username": "adm_mascotas",
+  "password": "admin",
+  "database": "mascotas",
+  "entities": [
+    "src/entities/User.ts"
+  ],
+  "synchronize": true,
+  "logging": false
+}
