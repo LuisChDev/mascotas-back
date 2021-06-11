@@ -35,7 +35,7 @@ export default class MascotaDao implements IMascotaDao {
   }
 
   async update(masc: IMascota): Promise<void> {
-    await this.repo.save(masc);
+    await this.repo.update(masc.id, masc);
   }
 
   async delete(id: string): Promise<void> {

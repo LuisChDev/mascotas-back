@@ -30,6 +30,7 @@ export default (usrRep: Repository<User>) => {
     login: async function (req: Request, res: Response) {
       // Check email and password present
       const { email, password } = req.body;
+      console.log("email: ", email, ", pwd: ", password);
       if (!(email && password)) {
         return res.status(BAD_REQUEST).json({
           error: paramMissingError,

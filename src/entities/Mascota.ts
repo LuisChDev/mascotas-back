@@ -3,6 +3,8 @@ import { Entity, Column, ObjectIdColumn } from "typeorm";
 export interface IMascota {
   id: string;
   name: string;
+  description: string;
+  phone: number;
   age: number | undefined;
   species: string;
   race: string | undefined;
@@ -16,6 +18,10 @@ export class Mascota implements IMascota {
   @Column()
   public name!: string;
   @Column()
+  public description!: string;
+  @Column()
+  public phone!: number;
+  @Column()
   public age: number | undefined;
   @Column()
   public species!: string;
@@ -26,6 +32,8 @@ export class Mascota implements IMascota {
 
   constructor (
     nameOrPet?: string | IMascota,
+    description?: string,
+    phone?: number,
     age?: number,
     species?: string,
     race?: string,
@@ -34,12 +42,16 @@ export class Mascota implements IMascota {
     if (typeof nameOrPet === "string" ||
       typeof nameOrPet === "undefined") {
       this.name = nameOrPet || '';
+      this.description = description || "";
+      this.phone = phone || 0;
       this.age = age;
       this.species = species || '';
       this.race = race;
       this.photo = photo;
     } else {
       this.name = nameOrPet.name;
+      this.description = nameOrPet.description;
+      this.phone = nameOrPet.phone;
       this.age = nameOrPet.age;
       this.species = nameOrPet.species;
       this.race = nameOrPet.race;

@@ -14,10 +14,15 @@ import { createConnection } from "typeorm";
 
 import { User } from "@entities/User";
 import { Mascota } from "@entities/Mascota";
+var cors = require('cors');
 
 const app = express();
-const { BAD_REQUEST } = StatusCodes;
+app.use(cors({
+  origin: "http://localhost:3001",
+  credentials: true
+}))
 
+const { BAD_REQUEST } = StatusCodes;
 
 createConnection().then(conn => {
 
