@@ -13,6 +13,7 @@ import { cookieProps } from "@shared/constants";
 import { createConnection } from "typeorm";
 
 import { User } from "@entities/User";
+import { Mascota } from "@entities/Mascota";
 
 const app = express();
 const { BAD_REQUEST } = StatusCodes;
@@ -21,6 +22,7 @@ const { BAD_REQUEST } = StatusCodes;
 createConnection().then(conn => {
 
   const UsrRepo = conn.getRepository(User);
+  const MascRepo = conn.getRepository(Mascota);
 
   /*****************************************************************************
    *                              Set basic express settings
@@ -41,7 +43,7 @@ createConnection().then(conn => {
   }
 
   // Add APIs
-  app.use("/api", BaseRouter(UsrRepo));
+  app.use("/api", BaseRouter(UsrRepo, MascRepo));
 
   // Print API errors
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

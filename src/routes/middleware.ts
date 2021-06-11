@@ -33,3 +33,17 @@ export const adminMW = async (req: Request, res: Response, next: NextFunction) =
         });
     }
 };
+
+/**
+ * verifica si el usuario está logueado.
+ */
+export const userMW = async (req: Request, res: Response, next: NextFunction) => {
+  const jwt = req.signedCookies[cookieProps.key];
+  if (!jwt) {
+    return res.status(UNAUTHORIZED).json({
+      error: "no se encuentra logueado."
+    });
+  }
+
+  next();
+}

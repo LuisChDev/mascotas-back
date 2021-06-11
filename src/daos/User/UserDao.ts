@@ -6,7 +6,7 @@ export interface IUserDao {
   getAll: () => Promise<IUser[]>;
   add: (user: IUser) => Promise<void>;
   update: (user: IUser) => Promise<void>;
-  delete: (id: number) => Promise<void>;
+  delete: (id: string) => Promise<void>;
 }
 
 class UserDao implements IUserDao {
@@ -41,8 +41,7 @@ class UserDao implements IUserDao {
    * @param user
    */
   public async add(user: IUser): Promise<void> {
-    this.repo.insert(user);
-    // return Promise.resolve(undefined);
+    await this.repo.save(user);
   }
 
   /**
@@ -50,18 +49,16 @@ class UserDao implements IUserDao {
    * @param user
    */
   public async update(user: IUser): Promise<void> {
-    // TODO
-    this.repo.save(user);
-    // return Promise.resolve(undefined);
+    await this.repo.update(user.id, user);
+    // await this.repo.save(user);
   }
 
   /**
    *
    * @param id
    */
-  public async delete(id: number): Promise<void> {
-    // TODO
-    this.repo.delete(id);
+  public async delete(id: string): Promise<void> {
+    await this.repo.delete(id);
     // return Promise.resolve(undefined);
   }
 }

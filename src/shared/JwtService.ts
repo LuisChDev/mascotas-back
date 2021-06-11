@@ -3,10 +3,11 @@
 import randomString from 'randomstring';
 import jsonwebtoken, { VerifyErrors } from 'jsonwebtoken';
 import { cookieProps } from '@shared/constants';
+import { ObjectID } from 'typeorm';
 
 
 export interface IClientData {
-    id: number;
+    id: string;
     role: number;
 }
 

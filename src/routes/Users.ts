@@ -1,9 +1,11 @@
 import StatusCodes from "http-status-codes";
 import { Request, Response } from "express";
-
-import UserDao from "@daos/User/UserDao.mock";
-import { paramMissingError } from "@shared/constants";
 import { Repository } from "typeorm";
+import { ObjectId } from "mongodb";
+
+// import UserDao from "@daos/User/UserDao.mock";
+import UserDao from "@daos/User/UserDao";
+import { paramMissingError } from "@shared/constants";
 import { User } from "@entities/User";
 
 const { BAD_REQUEST, CREATED, OK } = StatusCodes;
@@ -56,7 +58,7 @@ export default (usrRep: Repository<User>) => {
           error: paramMissingError,
         });
       }
-      user.id = Number(user.id);
+
       await userDao.update(user);
       return res.status(OK).end();
     },
@@ -70,7 +72,8 @@ export default (usrRep: Repository<User>) => {
      */
     deleteOneUser: async function (req: Request, res: Response) {
       const { id } = req.params;
-      await userDao.delete(Number(id));
+      console.log(id);
+      await userDao.delete(id);
       return res.status(OK).end();
     },
   };

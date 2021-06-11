@@ -6,7 +6,8 @@
   "password": "admin",
   "database": "mascotas",
   "entities": [
-    "src/entities/User.ts"
+    "src/entities/User.ts",
+    "src/entities/Mascota.ts"
   ],
   "synchronize": true,
   "logging": false
