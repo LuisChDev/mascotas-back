@@ -6,7 +6,7 @@ import MascotaDao from "@daos/Mascota/MascotaDao";
 import { Mascota } from "@entities/Mascota";
 import { paramMissingError } from "@shared/constants";
 
-const { BAD_REQUEST, OK, CREATED } = StatusCodes;
+const { INTERNAL_SERVER_ERROR, BAD_REQUEST, OK, CREATED } = StatusCodes;
 
 export default (mscRep: Repository<Mascota>) => {
   const mascDao = new MascotaDao(mscRep);
@@ -28,7 +28,7 @@ export default (mscRep: Repository<Mascota>) => {
     },
 
     addOnePet: async function (req: Request, res: Response) {
-      const { pet } = req.body;
+      let { pet } = req.body;
 
       if (!pet) {
         return res.status(BAD_REQUEST).json({
@@ -36,8 +36,35 @@ export default (mscRep: Repository<Mascota>) => {
         });
       }
 
-      await mascDao.add(pet);
-      return res.status(CREATED).end();
+      // saves the image locally and stores the URL in the database
+      const photo = req.files?.petPic;
+      if (!photo) {
+        return res.status(BAD_REQUEST).json({
+          error: "No se subió foto. intente de nuevo",
+        });
+      } else if (photo && photo instanceof Array) {
+        return res.status(BAD_REQUEST).json({
+          error: "De algún modo se subieron múltiples fotos de perfil. intente de nuevo"
+        });
+      } else if (photo) {
+        try {
+          console.log(photo);
+          await photo.mv(`${__dirname}/../public/${photo.name}`);
+          const newpet = {
+            ...JSON.parse(pet as unknown as string),
+            // typescript lo coge como objeto pero es una cadena (ノಠ益ಠ)ノ彡┻━┻
+            photo: `/${photo.name}`,
+          };
+          console.log(newpet);
+          await mascDao.add(newpet);
+          return res.status(CREATED).end();
+        } catch (error) {
+          console.log("hubo un error al guardar el archivo: ", error);
+          return res.status(INTERNAL_SERVER_ERROR).json({
+            error: "hubo un error al guardar la foto. Intente de nuevo"
+          });
+        }
+      }
     },
 
     updateOnePet: async function (req: Request, res: Response) {
